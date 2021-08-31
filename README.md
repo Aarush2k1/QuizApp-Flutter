@@ -1,4 +1,4 @@
-# Quizzler ❓
+# Quizzler
 
 ## Our Goal
 
@@ -11,7 +11,7 @@ We’re going to make a quiz app that tests your general knowledge. As one of th
 
 ![Finished App](https://github.com/londonappbrewery/Images/blob/master/quizzler-demo.gif)
 
-## What you will learn
+## Used
 
 - Modularising your code into separate classes.
 - Dart classes and objects.
@@ -22,4 +22,3 @@ We’re going to make a quiz app that tests your general knowledge. As one of th
 - The difference between var, const and final.
 
 
-![End Banner](https://github.com/londonappbrewery/Images/blob/master/readme-end-banner.png)
