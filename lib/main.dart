@@ -29,6 +29,7 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> _scorekeeper = [];
+  int correct_ans=0,wrong_ans=0;
 
   void checkAnswer(bool userPickedAns){
     setState(() {
@@ -36,11 +37,11 @@ class _QuizPageState extends State<QuizPage> {
         Alert(
           context: context,
           title: "Finished",
-          desc: "Quiz Finished",
+          desc: "Correct Answers: ${correct_ans}",
           buttons: [
             DialogButton(
               child: Text(
-                "Home",
+                'Home',
                 style: TextStyle(color: Colors.white, fontSize: 20),
               ),
               onPressed: () => Navigator.pop(context),
@@ -51,17 +52,22 @@ class _QuizPageState extends State<QuizPage> {
             )
           ],
         ).show();
-        quizBrain.nextQuestion(false);
         _scorekeeper.clear();
+        quizBrain.nextQuestion(false);
+        correct_ans=0;
       }
       else {
         bool correctanswer = quizBrain.getCorrectAnswer();
-        if (userPickedAns==correctanswer)
+        if (userPickedAns==correctanswer){
           _scorekeeper.add(
             Icon(Icons.check,color: Colors.green,),);
-        else
+          correct_ans++;
+        }
+        else{
           _scorekeeper.add(
             Icon(Icons.close,color: Colors.red,),);
+          wrong_ans++;
+        }
         quizBrain.nextQuestion(true);
       }
     });
