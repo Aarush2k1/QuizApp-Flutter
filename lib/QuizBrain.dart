@@ -31,9 +31,17 @@ class QuizBrain{
         true),
   ];
 
-  void nextQuestion(){
+  //Checks if last question reached
+  bool isFinished(){
     if(_questionNumber<_questionBank.length-1)
+      return false;
+    else return true;
+  }
+
+  void nextQuestion(bool status){
+    if(status==true && _questionNumber<_questionBank.length-1)
       _questionNumber++;
+    else _questionNumber=0;
   }
   String getQuestionText(){
     return _questionBank[_questionNumber].questionText;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'QuizBrain.dart';
 
 void main() => runApp(Quizzler());
@@ -27,23 +28,44 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scorekeeper = [];
+  List<Icon> _scorekeeper = [];
 
-//  List<String> questions=[
-// 'You can lead a cow down stairs but not up stairs.',
-// 'Approximately one quarter of human bones are in the feet.',
-//'A slug\'s blood is green.',
-//  ];
-//
-//  List<bool> answers=[false,true,true];
-//
-//  Question q1= Question(q:'You can lead a cow down stairs but not up stairs.',a:false);
-
-//  List<Question> questionBank =[
-//    Question(q:'You can lead a cow down stairs but not up stairs.',a:false),
-//    Question(q:'Approximately one quarter of human bones are in the feet.',a:true),
-//    Question(q:'A slug\'s blood is green.',a:false),
-//  ];
+  void checkAnswer(bool userPickedAns){
+    setState(() {
+      if(quizBrain.isFinished()){
+        Alert(
+          context: context,
+          title: "Finished",
+          desc: "Quiz Finished",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Home",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              gradient: LinearGradient(colors: [
+                Color.fromRGBO(116, 116, 191, 1.0),
+                Color.fromRGBO(52, 138, 199, 1.0)
+              ]),
+            )
+          ],
+        ).show();
+        quizBrain.nextQuestion(false);
+        _scorekeeper.clear();
+      }
+      else {
+        bool correctanswer = quizBrain.getCorrectAnswer();
+        if (userPickedAns==correctanswer)
+          _scorekeeper.add(
+            Icon(Icons.check,color: Colors.green,),);
+        else
+          _scorekeeper.add(
+            Icon(Icons.close,color: Colors.red,),);
+        quizBrain.nextQuestion(true);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +73,14 @@ class _QuizPageState extends State<QuizPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+        //Question Display
         Expanded(
           flex: 5,
           child: Padding(
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
+
                 quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -67,6 +91,7 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
         ),
+        //True Button
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(15.0),
@@ -81,19 +106,12 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
-                bool correctanswer = quizBrain.getCorrectAnswer();
-                if (correctanswer)
-                  print("correct answer");
-                else
-                  print("wrong answer");
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
         ),
+        //False Button
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(15.0),
@@ -108,23 +126,14 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
-                bool correctanswer = quizBrain.getCorrectAnswer();
-                if (correctanswer)
-                  print("correct answer");
-                else
-                  print("wrong answer");
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
             ),
           ),
         ),
-
-        //TODO: Add a Row here as your score keeper
+        //scorekeeper
         Row(
-          children: scorekeeper,
+          children: _scorekeeper,
         ),
       ],
     );
