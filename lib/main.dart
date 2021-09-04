@@ -29,15 +29,15 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Icon> _scorekeeper = [];
-  int correct_ans=0,wrong_ans=0;
+  int correctAns = 0;
 
-  void checkAnswer(bool userPickedAns){
+  void checkAnswer(bool userPickedAns) {
     setState(() {
-      if(quizBrain.isFinished()){
+      if (quizBrain.isFinished()) {
         Alert(
           context: context,
           title: "Finished",
-          desc: "Correct Answers: ${correct_ans}",
+          desc: "Correct Answers:" + correctAns.toString(),
           buttons: [
             DialogButton(
               child: Text(
@@ -54,19 +54,24 @@ class _QuizPageState extends State<QuizPage> {
         ).show();
         _scorekeeper.clear();
         quizBrain.nextQuestion(false);
-        correct_ans=0;
-      }
-      else {
+        correctAns = 0;
+      } else {
         bool correctanswer = quizBrain.getCorrectAnswer();
-        if (userPickedAns==correctanswer){
+        if (userPickedAns == correctanswer) {
           _scorekeeper.add(
-            Icon(Icons.check,color: Colors.green,),);
-          correct_ans++;
-        }
-        else{
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+          correctAns++;
+        } else {
           _scorekeeper.add(
-            Icon(Icons.close,color: Colors.red,),);
-          wrong_ans++;
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
         }
         quizBrain.nextQuestion(true);
       }
@@ -86,7 +91,6 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-
                 quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -101,9 +105,7 @@ class _QuizPageState extends State<QuizPage> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.green,
+            child: TextButton(
               child: Text(
                 'True',
                 style: TextStyle(
@@ -111,6 +113,8 @@ class _QuizPageState extends State<QuizPage> {
                   fontSize: 20.0,
                 ),
               ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.green)),
               onPressed: () {
                 checkAnswer(true);
               },
@@ -121,9 +125,7 @@ class _QuizPageState extends State<QuizPage> {
         Expanded(
           child: Padding(
             padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.red,
+            child: TextButton(
               child: Text(
                 'False',
                 style: TextStyle(
@@ -131,6 +133,8 @@ class _QuizPageState extends State<QuizPage> {
                   fontSize: 20.0,
                 ),
               ),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.red)),
               onPressed: () {
                 checkAnswer(false);
               },
